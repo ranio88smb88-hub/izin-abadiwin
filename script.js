@@ -16,9 +16,9 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         staffList: [],
         shiftList: [
-            { id: 'shift1', name: 'Shift 1', start: '08:00', end: '16:00' },
-            { id: 'shift2', name: 'Shift 2', start: '14:00', end: '22:00' },
-            { id: 'shift3', name: 'Shift 3', start: '22:00', end: '06:00' }
+            { id: 'shift1', name: 'Shift 1', start: '03:05', end: '16:00' },
+            { id: 'shift2', name: 'Shift 2', start: '03:05', end: '22:00' },
+            { id: 'shift3', name: 'Shift 3', start: '03:05', end: '06:00' }
         ],
         jobdeskList: [
             { id: 'jobdesk1', name: 'Kasir' },
@@ -1083,4 +1083,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Inisialisasi aplikasi
     initializeApp();
+
 });
