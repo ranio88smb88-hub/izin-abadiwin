@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Izin Staff - Sistem Manajemen Izin</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="screen active">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="logo-container">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3067/3067256.png" alt="Logo Perusahaan" id="companyLogo">
+                </div>
+                <h1><i class="fas fa-bolt"></i> Sistem Izin Staff</h1>
+                <p class="subtitle">Aplikasi Manajemen Izin Karyawan</p>
+            </div>
+            
+            <div class="login-form">
+                <div class="input-group">
+                    <label for="username"><i class="fas fa-user"></i> Username</label>
+                    <input type="text" id="username" placeholder="Masukkan username">
+                </div>
+                
+                <div class="input-group">
+                    <label for="password"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="password" placeholder="Masukkan password">
+                </div>
+                
+                <div class="input-group">
+                    <label for="shiftTime"><i class="fas fa-clock"></i> Waktu Shift Masuk</label>
+                    <input type="time" id="shiftTime" value="14:45">
+                </div>
+                
+                <button id="loginBtn" class="btn-login">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                
+                <div class="login-info">
+                    <p><i class="fas fa-info-circle"></i> Info Login:</p>
+                    <p>• Akses hanya 2 jam setelah shift dimulai</p>
+                    <p>• Admin: username: <strong>csline</strong>, password: <strong>aa1234</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main App Screen -->
+    <div id="appScreen" class="screen">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <div class="logo">
+                    <i class="fas fa-bolt lightning-icon"></i>
+                    <h1>Sistem Izin Staff</h1>
+                </div>
+                <div class="current-user">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="currentStaffName">Staff Name</span>
+                </div>
+            </div>
+            
+            <div class="header-center">
+                <div class="digital-clock">
+                    <i class="fas fa-clock"></i>
+                    <span id="digitalClock">00:00:00</span>
+                    <div id="dateDisplay" class="date-display">Hari, DD Bulan YYYY</div>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <button id="settingsBtn" class="btn-icon" title="Pengaturan">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <button id="logoutBtn" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </header>
+        
+        <div class="app-container">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="staff-info">
+                    <h3><i class="fas fa-id-card"></i> Info Staff</h3>
+                    <div class="staff-details">
+                        <p><strong>Nama:</strong> <span id="sidebarStaffName">-</span></p>
+                        <p><strong>Shift:</strong> <span id="sidebarShift">-</span></p>
+                        <p><strong>Jobdesk:</strong> <span id="sidebarJobdesk">-</span></p>
+                    </div>
+                </div>
+                
+                <div class="permission-quota">
+                    <h3><i class="fas fa-chart-pie"></i> Kuota Izin</h3>
+                    <div class="quota-item">
+                        <div class="quota-label">
+                            <i class="fas fa-coffee"></i> Izin 15 Menit
+                        </div>
+                        <div class="quota-counter">
+                            <span id="shortPermCount">0</span>/4
+                        </div>
+                    </div>
+                    <div class="quota-item">
+                        <div class="quota-label">
+                            <i class="fas fa-utensils"></i> Ambil Makan
+                        </div>
+                        <div class="quota-counter">
+                            <span id="mealPermCount">0</span>/3
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="active-permissions">
+                    <h3><i class="fas fa-running"></i> Sedang Izin</h3>
+                    <div id="activePermissionsList">
+                        <p class="no-data">Tidak ada staff yang sedang izin</p>
+                    </div>
+                </div>
+            </aside>
+            
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="permission-controls">
+                    <h2><i class="fas fa-paper-plane"></i> Ajukan Izin</h2>
+                    
+                    <div class="permission-options">
+                        <div class="permission-card" data-type="short">
+                            <div class="permission-icon">
+                                <i class="fas fa-coffee"></i>
+                            </div>
+                            <h3>Izin 15 Menit</h3>
+                            <p>Kuota: <span id="shortQuota">4</span> kali/hari</p>
+                            <button class="btn-permission" data-type="short">
+                                <i class="fas fa-play"></i> Mulai Izin
+                            </button>
+                        </div>
+                        
+                        <div class="permission-card" data-type="meal">
+                            <div class="permission-icon">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            <h3>Ambil Makan</h3>
+                            <p>Durasi: 7 menit</p>
+                            <p>Kuota: <span id="mealQuota">3</span> kali/hari</p>
+                            <button class="btn-permission" data-type="meal">
+                                <i class="fas fa-play"></i> Mulai Izin
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="current-permission" id="currentPermissionSection">
+                        <h3><i class="fas fa-hourglass-half"></i> Izin Aktif</h3>
+                        <div id="currentPermissionInfo">
+                            <p class="no-data">Tidak ada izin aktif</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="permission-history">
+                    <h2><i class="fas fa-history"></i> Riwayat Izin</h2>
+                    <div class="table-container">
+                        <table id="permissionHistoryTable">
+                            <thead>
+                                <tr>
+                                    <th>Tanggal</th>
+                                    <th>Jam Mulai</th>
+                                    <th>Jam Selesai</th>
+                                    <th>Durasi</th>
+                                    <th>Jenis</th>
+                                    <th>Jobdesk</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="permissionHistoryBody">
+                                <tr>
+                                    <td colspan="7" class="no-data">Tidak ada riwayat izin</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-cog"></i> Pengaturan Sistem</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="settings-tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-tab="staff">Staff</button>
+                        <button class="tab-btn" data-tab="shifts">Shift</button>
+                        <button class="tab-btn" data-tab="jobdesk">Jobdesk</button>
+                        <button class="tab-btn" data-tab="quota">Kuota Izin</button>
+                        <button class="tab-btn" data-tab="appearance">Tampilan</button>
+                    </div>
+                    
+                    <div class="tab-content">
+                        <!-- Staff Management -->
+                        <div id="staff-tab" class="tab-pane active">
+                            <h3><i class="fas fa-users"></i> Kelola Staff</h3>
+                            <div class="form-group">
+                                <label for="newStaffName">Nama Staff</label>
+                                <input type="text" id="newStaffName" placeholder="Masukkan nama staff">
+                            </div>
+                            <div class="form-group">
+                                <label for="newStaffUsername">Username</label>
+                                <input type="text" id="newStaffUsername" placeholder="Masukkan username">
+                            </div>
+                            <div class="form-group">
+                                <label for="newStaffPassword">Password</label>
+                                <input type="password" id="newStaffPassword" placeholder="Masukkan password">
+                            </div>
+                            <div class="form-group">
+                                <label for="newStaffShift">Shift</label>
+                                <select id="newStaffShift">
+                                    <option value="shift1">Shift 1 (08:00 - 16:00)</option>
+                                    <option value="shift2">Shift 2 (14:00 - 22:00)</option>
+                                    <option value="shift3">Shift 3 (22:00 - 06:00)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="newStaffJobdesk">Jobdesk</label>
+                                <select id="newStaffJobdesk"></select>
+                            </div>
+                            <button id="addStaffBtn" class="btn-save">
+                                <i class="fas fa-plus"></i> Tambah Staff
+                            </button>
+                            
+                            <div class="staff-list">
+                                <h4>Daftar Staff</h4>
+                                <table id="staffListTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama</th>
+                                            <th>Username</th>
+                                            <th>Shift</th>
+                                            <th>Jobdesk</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="staffListBody">
+                                        <!-- Staff list will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Shift Management -->
+                        <div id="shifts-tab" class="tab-pane">
+                            <h3><i class="fas fa-clock"></i> Kelola Shift</h3>
+                            <div class="form-group">
+                                <label for="newShiftName">Nama Shift</label>
+                                <input type="text" id="newShiftName" placeholder="Contoh: Shift Pagi">
+                            </div>
+                            <div class="form-group">
+                                <label for="newShiftStart">Waktu Mulai</label>
+                                <input type="time" id="newShiftStart">
+                            </div>
+                            <div class="form-group">
+                                <label for="newShiftEnd">Waktu Selesai</label>
+                                <input type="time" id="newShiftEnd">
+                            </div>
+                            <button id="addShiftBtn" class="btn-save">
+                                <i class="fas fa-plus"></i> Tambah Shift
+                            </button>
+                            
+                            <div class="shift-list">
+                                <h4>Daftar Shift</h4>
+                                <table id="shiftListTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama Shift</th>
+                                            <th>Waktu Mulai</th>
+                                            <th>Waktu Selesai</th>
+                                            <th>Durasi</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="shiftListBody">
+                                        <!-- Shift list will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Jobdesk Management -->
+                        <div id="jobdesk-tab" class="tab-pane">
+                            <h3><i class="fas fa-tasks"></i> Kelola Jobdesk</h3>
+                            <div class="form-group">
+                                <label for="newJobdeskName">Nama Jobdesk</label>
+                                <input type="text" id="newJobdeskName" placeholder="Contoh: Kasir, Gudang, dll">
+                            </div>
+                            <button id="addJobdeskBtn" class="btn-save">
+                                <i class="fas fa-plus"></i> Tambah Jobdesk
+                            </button>
+                            
+                            <div class="jobdesk-list">
+                                <h4>Daftar Jobdesk</h4>
+                                <table id="jobdeskListTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama Jobdesk</th>
+                                            <th>Jumlah Staff</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="jobdeskListBody">
+                                        <!-- Jobdesk list will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Quota Management -->
+                        <div id="quota-tab" class="tab-pane">
+                            <h3><i class="fas fa-chart-bar"></i> Kelola Kuota Izin</h3>
+                            <div class="form-group">
+                                <label for="shortPermissionQuota">Izin 15 Menit (per hari)</label>
+                                <input type="number" id="shortPermissionQuota" min="1" max="10" value="4">
+                            </div>
+                            <div class="form-group">
+                                <label for="mealPermissionQuota">Izin Ambil Makan (per hari)</label>
+                                <input type="number" id="mealPermissionQuota" min="1" max="10" value="3">
+                            </div>
+                            <div class="form-group">
+                                <label for="mealPermissionDuration">Durasi Ambil Makan (menit)</label>
+                                <input type="number" id="mealPermissionDuration" min="1" max="30" value="7">
+                            </div>
+                            <button id="saveQuotaBtn" class="btn-save">
+                                <i class="fas fa-save"></i> Simpan Perubahan
+                            </button>
+                        </div>
+                        
+                        <!-- Appearance Settings -->
+                        <div id="appearance-tab" class="tab-pane">
+                            <h3><i class="fas fa-palette"></i> Pengaturan Tampilan</h3>
+                            <div class="form-group">
+                                <label for="logoUrl">URL Logo Perusahaan</label>
+                                <input type="text" id="logoUrl" placeholder="https://contoh.com/logo.png">
+                                <button id="updateLogoBtn" class="btn-small">
+                                    <i class="fas fa-sync"></i> Update Logo
+                                </button>
+                            </div>
+                            <div class="form-group">
+                                <label for="backgroundUrl">URL Background</label>
+                                <input type="text" id="backgroundUrl" placeholder="https://contoh.com/background.jpg">
+                                <button id="updateBackgroundBtn" class="btn-small">
+                                    <i class="fas fa-sync"></i> Update Background
+                                </button>
+                            </div>
+                            <div class="form-group">
+                                <label>Warna Tema</label>
+                                <div class="color-options">
+                                    <div class="color-option" data-color="#1e40af" style="background-color: #1e40af;"></div>
+                                    <div class="color-option" data-color="#1e3a8a" style="background-color: #1e3a8a;"></div>
+                                    <div class="color-option" data-color="#1d4ed8" style="background-color: #1d4ed8;"></div>
+                                    <div class="color-option" data-color="#0369a1" style="background-color: #0369a1;"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="animationToggle">Animasi Izin</label>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="animationToggle" checked>
+                                    <label for="animationToggle" class="toggle-label"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sleeping Animation -->
+    <div id="sleepingAnimation" class="sleeping-animation">
+        <div class="sleeping-content">
+            <div class="sleeping-icon">
+                <i class="fas fa-moon"></i>
+            </div>
+            <div class="sleeping-text">Staff Sedang Izin</div>
+            <div class="sleeping-z">Zzz...</div>
+        </div>
+    </div>
+    
+    <!-- Notification Toast -->
+    <div id="notificationToast" class="toast">
+        <div class="toast-content">
+            <i class="fas fa-info-circle toast-icon"></i>
+            <div class="toast-message">Pesan notifikasi</div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
